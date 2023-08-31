@@ -35,7 +35,6 @@ services:
 
 volumes:
   recipe_db:
-    external: true
   recipe_app:
     driver: local
     driver_opts:
