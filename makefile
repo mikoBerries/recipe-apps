@@ -29,6 +29,6 @@ dockerup:
 	docker-compose up
 
 dockerdown:
-	docker-compsoe down
+	docker-compose down
 
 .phony: server migration migrate shell collectstatic depedency container shell
