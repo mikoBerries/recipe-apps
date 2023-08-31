@@ -1,17 +1,17 @@
 server:
-	./myDjangoProject/manage.py runserver
+	./app/manage.py runserver
 
 migration:
-	py ./myDjangoProject/manage.py makemigrations
+	py ./app/manage.py makemigrations
 
 migrate:
-	py ./myDjangoProject/manage.py migrate
+	py ./app/manage.py migrate
 
 shell:
-	py ./myDjangoProject/manage.py shell
+	py ./app/manage.py shell
 
 collectstatic:
-	py ./myDjangoProject/manage.py collectstatic
+	py ./app/manage.py collectstatic
 
 depedency:
 	py -m pip freeze > requirement.txt
@@ -19,7 +19,16 @@ depedency:
 container:
 	docker build .
 
-shell:
+shells:
 	docker exec -it app bin/sh
+
+dockerbuild:
+	docker-compose build
+
+dockerup:
+	docker-compose up
+
+dockerdown:
+	docker-compsoe down
 
 .phony: server migration migrate shell collectstatic depedency container shell
