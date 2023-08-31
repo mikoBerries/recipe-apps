@@ -1,6 +1,7 @@
 version: "3.3"
 
 services:
+
   app:
     build:
       context: .
@@ -8,11 +9,37 @@ services:
         - DEV=true
     ports:
       - "8000-8000"
+    depends_on:
+      - postgres
+    environment:
+      - DB_SOURCE=postgresql://root:mysecretpassword@postgres:5432/recipe?sslmode=disable
+      - DB_HOST=postgres:5432
+      - DB_NAME=recipe
+      - DB_USER=root
+      - DB_PASS=mysecretpassword
     volumes:
-      - recipe_app:/app
+      - recipe_app/app
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
 
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=recipe
+    volumes:
+        - recipe_db:/var/lib/postgresql/data
+
+
+
 volumes:
-  recipe_app:
+  recipe_db:
     external: true
+  recipe_app:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/app
+      o: bind
+ 
