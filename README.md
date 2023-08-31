@@ -15,3 +15,7 @@
     4. app/recipe/ : Populate Recipe related code (CRUD Recipe).
 
 * flake8 linting for python.
+
+* postgrsql adapter for django to connect: (https://pypi.org/project/psycopg2/)
+    - psycopg2-binary: good for development only & work in many machine like alpine
+    - psycopg2 : compiles from source & required depedency

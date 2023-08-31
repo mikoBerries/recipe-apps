@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirement.txt /tmp/requirement.txt
 COPY ./requirement.dev.txt /tmp/requirement.dev.txt
 
-# copy source doe
+# copy source code
 COPY ./app /app
 
 WORKDIR /app
@@ -17,15 +17,20 @@ ARG DEV=false
 
 # create virtual env 
 # upgrading pip
+# installing psycopg2 depedency for alpine images
 # instaling depedency for python project
 # add user for alpine images to log instead root user
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+    build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirement.txt && \
     if [ $DEV="true" ]; \
     then /py/bin/pip install -r /tmp/requirement.dev.txt ; \
     fi && \
     rm -rf /tmp && \
+    # apk del .tmp-build-deps && \
     adduser\
     --disabled-password \
     --no-create-home \

@@ -19,4 +19,7 @@ depedency:
 container:
 	docker build .
 
-.phony: server migration migrate shell collectstatic depedency container
+shell:
+	docker exec -it app bin/sh
+
+.phony: server migration migrate shell collectstatic depedency container shell
