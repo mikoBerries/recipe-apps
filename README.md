@@ -19,3 +19,9 @@
 * postgrsql adapter for django to connect: (https://pypi.org/project/psycopg2/)
     - psycopg2-binary: good for development only & work in many machine like alpine
     - psycopg2 : compiles from source & required depedency
+* Django Database using ORM - Object Rlational Mapper.
+
+# Django model
+--------------
+
+* Django already come with base user with many fucntion to use for managing user in aplication
