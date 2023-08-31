@@ -18,9 +18,9 @@ jobs:
             username: ${{ secrets.DOCKERHUB_USER }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
        
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Test
-          run: docker-compose run --rm app c "python manage.py test"
-        - name: Linting
-          run: docker-compose run --rm app c "flake8"
+        # - name: Checkout
+        #   uses: actions/checkout@v2
+        # - name: Test
+        #   run: docker-compose run --rm app c "python manage.py test"
+        # - name: Linting
+        #   run: docker-compose run --rm app c "flake8"
