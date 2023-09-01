@@ -10,6 +10,7 @@ from rest_framework import status
 
 
 CREATE_USER_URL = reverse('user:create')
+TOKEN_URL = reverse('user:token')
 
 
 def create_user(**params):
@@ -75,3 +76,63 @@ class PublicUserApiTests(TestCase):
             email=payload['email']
         ).exists()
         self.assertFalse(user_exists)
+
+    def test_create_token_for_user(self):
+        """Test generate token for valid credentials"""
+
+        # Create user
+        user_details = {
+            'name': 'TestName',
+            'email': 'text@example.com',
+            'password': 'testpassword',
+        }
+
+        create_user(**user_details)
+
+        # create token
+        payload = {
+            'email': user_details['name'],
+            'password': user_details['password'],
+        }
+        response = self.client.post(TOKEN_URL, payload)
+
+        # Check response
+        self.assertIn('token', response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_token_bad_credentials(self):
+        """Test returns a error if credentials invalid."""
+
+        # Create user
+        user_details = {
+            'name': 'TestName',
+            'email': 'text@example.com',
+            'password': 'testpassword',
+        }
+
+        create_user(**user_details)
+
+        # create token
+        payload = {
+            'email': 'TestName',
+            'password': 'tampperedpassword',
+        }
+
+        response = self.client.post(TOKEN_URL, payload)
+
+        # Check response
+        self.assertNotIn('token', response.data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_token_blank_password(self):
+        """Test posting a blank passowrd return an error"""
+        # create token
+        payload = {
+            'email': 'Test name',
+            'password': '',
+        }
+
+        response = self.client.post(TOKEN_URL, payload)
+        # Check response
+        self.assertNotIn('token', response.data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
