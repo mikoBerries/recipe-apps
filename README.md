@@ -21,7 +21,6 @@
     - psycopg2 : compiles from source & required depedency
 * Django Database using ORM - Object Rlational Mapper.
 
-# Django model
---------------
+* Django model already come with base user with many fucntion to use for managing user in aplication.
 
-* Django already come with base user with many fucntion to use for managing user in aplication
+* Creating API documentation with drf-spectacular to create API Schema and server it as swagger.
