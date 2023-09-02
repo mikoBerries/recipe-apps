@@ -35,7 +35,7 @@ class PublicUserApiTests(TestCase):
             'name': 'Test name'
         }
         # POST to django API
-        response = self.client.post(create_user, payload)
+        response = self.client.post(CREATE_USER_URL, payload)
 
         # Check response
         # check status code
@@ -44,7 +44,7 @@ class PublicUserApiTests(TestCase):
         # get user from DB
         created_user = get_user_model().objects.get(email=payload['email'])
 
-        self.assertEqual(create_user.check_password(payload['password']))
+        self.assertTrue(created_user.check_password(payload['password']))
         self.assertNotIn('password', response.data)
 
     def test_user_with_email_exist_error(self):
@@ -60,11 +60,11 @@ class PublicUserApiTests(TestCase):
         # check response is bad request
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        def test_password_too_short_error(self):
-            """Test an error is returned if passowd less than settings"""
+    def test_password_too_short_error(self):
+        """Test an error is returned if password less than settings"""
         payload = {
             'email': 'text@example.com',
-            'password': 'pas',
+            'password': 'ps',
             'name': 'Test name'
         }
         response = self.client.post(CREATE_USER_URL, payload)
@@ -93,7 +93,7 @@ class PublicUserApiTests(TestCase):
 
         # create token
         payload = {
-            'email': user_details['name'],
+            'email': user_details['email'],
             'password': user_details['password'],
         }
         response = self.client.post(TOKEN_URL, payload)
@@ -127,7 +127,7 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_blank_password(self):
-        """Test posting a blank passowrd return an error"""
+        """Test posting a blank password return an error"""
         # create token
         payload = {
             'email': 'Test name',
@@ -159,7 +159,7 @@ class PrivateUserApiTests(TestCase):
         )
 
         # authenticate using create user
-        self.client = APIClient
+        self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_retive_profile_success(self):
@@ -198,5 +198,5 @@ class PrivateUserApiTests(TestCase):
 
         # Check if updated data are correct
         self.assertEqual(self.user.name, payload['name'])
-        self.assertTrue(self.user.check_password(payload['passowrd']))
+        self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

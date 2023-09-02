@@ -38,7 +38,7 @@ def create_recipe(user, **params):
     # update defaults dictonary with incoming params
     defaults.update(params)
 
-    recipe = Recipe.objects.create(user=user, **params)
+    recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
 
@@ -59,15 +59,14 @@ class PrivateRecipeAPITests(TestCase):
     """Test aunthenticated API request."""
 
     def setUp(self):
-        self.client = APIClient()
         # setUp before test class started
         self.user = get_user_model().objects.create_user(
-            email='test@example.com',
+            email='testing@example.com',
             password='testpass123',
         )
 
         # authenticate using create user
-        self.client = APIClient
+        self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_retrive_recipes(self):
