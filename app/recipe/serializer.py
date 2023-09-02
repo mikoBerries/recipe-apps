@@ -16,3 +16,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
         # fields = ['id','title','time_minutes','price','link']
         # exclude = ['id']
+
+
+class RecipeDetailSerializer(RecipeSerializer):
+    """Serializer for Detail recipes."""
+
+    class Meta(RecipeSerializer.Meta):
+        fields = RecipeSerializer.Meta.fields + ['details']
