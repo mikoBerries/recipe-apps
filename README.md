@@ -24,3 +24,17 @@
 * Django model already come with base user with many fucntion to use for managing user in aplication.
 
 * Creating API documentation with drf-spectacular to create API Schema and server it as swagger.
+
+* APIView:
+    - focused for HTTP methods.
+    - Class methods for HTTP method(GET, POST, PUT, PATCH, DELETE).
+    - Provide felixibility over URLs and logic.
+    - Useful for non CRUD APIs:
+        1. Avoid for simple CRUD APIs.
+        2. for bespoke logic (auth, jobs, external apis).
+
+* Viewsets:
+    - Focused around actions (Retrieve, list, update, partial update, destroy)
+    - Map to Django models.
+    - Use Router to generate URLs.
+    - Great for CRUD operations on modles.
