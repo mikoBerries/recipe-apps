@@ -95,7 +95,7 @@ class PrivateTagsApiTest(TestCase):
         payload = {'name': 'Chocolate'}
 
         url = detail_url(tag.id)
-        response = self.client.patch(url)
+        response = self.client.patch(url, payload)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         tag.refresh_from_db()
