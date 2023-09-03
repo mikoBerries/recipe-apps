@@ -86,6 +86,8 @@ class PrivateRecipeAPITests(TestCase):
         serializer = RecipeSerializer(recipes, many=True)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.data)
+        print(serializer.data)
         self.assertEqual(response.data, serializer.data)
 
     def test_recipe_list_limited_to_user(self):
