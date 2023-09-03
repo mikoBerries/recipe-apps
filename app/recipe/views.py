@@ -6,7 +6,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import Recipe
+from core.models import Recipe, Tag
 from recipe import serializer
 
 
@@ -35,14 +35,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-# class TagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-#     """View for tag in the database."""
-#     serializer_class = serializer.TagSerializer
-#     queryset = Tag.objects.all()
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [IsAuthenticated]
+class TagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """View for tag in the database."""
+    serializer_class = serializer.TagSerializer
+    queryset = Tag.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def get_queryset(self):
-#         """Filtering queryset to authenticated user only."""
-#         # will filtering Tag data with incoming user request.
-#         return self.queryset.filter(user=self.request.user).order_by('-name')
+    def get_queryset(self):
+        """Filtering queryset to authenticated user only."""
+        # will filtering Tag data with incoming user request.
+        return self.queryset.filter(user=self.request.user).order_by('-name')
