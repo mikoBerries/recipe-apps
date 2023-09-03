@@ -41,6 +41,8 @@
     - Use Router to generate URLs.
     - Great for CRUD operations on modles.
 
+* generictviewst with mixins.
+
  * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
 
  * Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
