@@ -41,7 +41,8 @@
     - Use Router to generate URLs.
     - Great for CRUD operations on modles.
 
-* generictviewst with mixins.
+* viewsets.GenericViewSet with mixins:
+    - viewsets.GenericViewSet are empty class used to colabroate with mixins for making a views that accept mixins we want. 
 
  * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
 
