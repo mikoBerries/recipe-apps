@@ -62,5 +62,24 @@ class Recipe(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     link = models.CharField(max_length=255, blank=True)
 
+    # create_on will auto fill by.save() wheen first data created
+    create_on = models.DateTimeField(auto_now_add=True, null=True)
+    # update on will autol fill by .save when data is selected and updated vai .save()
+    update_on = models.DateTimeField(auto_now=True)
+
+    tags = models.ManyToManyField('Tag')
+
     def __str__(self) -> str:
         return self.title
+
+
+class Tag (models.Model):
+    """Tag for filtering recipe."""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return self.name
