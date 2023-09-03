@@ -19,6 +19,8 @@
 * postgrsql adapter for django to connect: (https://pypi.org/project/psycopg2/)
     - psycopg2-binary: good for development only & work in many machine like alpine
     - psycopg2 : compiles from source & required depedency
+
+* Django rest framework documentation (https://www.django-rest-framework.org/)
 * Django Database using ORM - Object Rlational Mapper.
 
 * Django model already come with base user with many fucntion to use for managing user in aplication.
@@ -38,3 +40,12 @@
     - Map to Django models.
     - Use Router to generate URLs.
     - Great for CRUD operations on modles.
+
+* generictviewst with mixins.
+
+ * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
+
+ * Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
+
+ * Chanching with django (https://docs.djangoproject.com/en/4.2/topics/cache/#:~:text=redis%2Dpy%20is%20the%20binding,Set%20BACKEND%20to%20django.)
+ * Django memchace support string vs redis support map with many data set and easy to manage with aplication redis db.(https://awstip.com/django-caching-with-redis-c66ab2126c8a).
