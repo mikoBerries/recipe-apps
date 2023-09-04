@@ -44,9 +44,19 @@
 * viewsets.GenericViewSet with mixins:
     - viewsets.GenericViewSet are empty class used to colabroate with mixins for making a views that accept mixins we want. 
 
- * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
+* rest_framework router will mapping default Route for get,put,patch,delete in Viewset declared function(retrive, update, partial_update, destroy):
+```code
+    mapping={
+        'get': 'retrieve',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy'
+    }
+```
 
- * Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
+* django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
 
- * Chanching with django (https://docs.djangoproject.com/en/4.2/topics/cache/#:~:text=redis%2Dpy%20is%20the%20binding,Set%20BACKEND%20to%20django.)
- * Django memchace support string vs redis support map with many data set and easy to manage with aplication redis db.(https://awstip.com/django-caching-with-redis-c66ab2126c8a).
+* Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
+
+* Chanching with django (https://docs.djangoproject.com/en/4.2/topics/cache/#:~:text=redis%2Dpy%20is%20the%20binding,Set%20BACKEND%20to%20django.)
+* Django memchace support string vs redis support map with many data set and easy to manage with aplication redis db.(https://awstip.com/django-caching-with-redis-c66ab2126c8a).

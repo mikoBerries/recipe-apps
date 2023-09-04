@@ -16,6 +16,11 @@ from recipe.serializer import IngredientSerializer
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 
+def detail_url(ingredient_id):
+    """Create and return a tag detail URL."""
+    return reverse('recipe:ingredient-detail', args=[ingredient_id])
+
+
 def create_dummy_user(email='user_ingredients_api@example.com', password='thisispassowrd'):
     """Create and return a new user for testing."""
     return get_user_model().objects.create_user(email=email, password=password)
@@ -79,3 +84,29 @@ class PrivateIngredientTest(TestCase):
 
         self.assertEqual(len(serializer.data), 2)
         self.assertEqual(ingredients.data, serializer.data)
+
+    def test_update_ingredients(self):
+        """Test updating a Inggredients."""
+        ingredients = Ingredient.objects.create(user=self.user, name='eggs')
+
+        payload = {'name': 'butter'}
+
+        url = detail_url(ingredients.id)
+        response = self.client.patch(url, payload)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        Ingredient.refresh_from_db()
+        self.assertEqual(ingredients.name, payload['name'])
+
+    def test_delete_ingredients(self):
+        """Test delete a Inggredients."""
+
+        ingredients = Ingredient.objects.create(user=self.user, name='Flour')
+
+        url = detail_url(ingredients.id)
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        ingredient_data_after = Ingredient.objects.filter(user=self.user)
+        self.assertFalse(ingredient_data_after.exists())
