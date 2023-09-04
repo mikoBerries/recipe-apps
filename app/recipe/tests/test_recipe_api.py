@@ -475,9 +475,9 @@ class PrivateRecipeAPITests(TestCase):
         serializer_fish_chips = RecipeSerializer(recipe_three)
 
         # only returning an selected tags
-        self.assertIn(serializer_salad, response.data)
-        self.assertIn(serializer_ice_cream, response.data)
-        self.assertNotIn(serializer_fish_chips, response.data)
+        self.assertIn(serializer_salad.data, response.data)
+        self.assertIn(serializer_ice_cream.data, response.data)
+        self.assertNotIn(serializer_fish_chips.data, response.data)
 
     def test_filter_by_ingredients(self):
         """Test filtering recipe by ingredients."""
@@ -503,9 +503,9 @@ class PrivateRecipeAPITests(TestCase):
         serializer_fish_chips = RecipeSerializer(recipe_three)
 
         # only returning an selected tags
-        self.assertIn(serializer_salad, response.data)
-        self.assertIn(serializer_ice_cream, response.data)
-        self.assertNotIn(serializer_fish_chips, response.data)
+        self.assertIn(serializer_salad.data, response.data)
+        self.assertIn(serializer_ice_cream.data, response.data)
+        self.assertNotIn(serializer_fish_chips.data, response.data)
 
 
 class ImageUploadTest(TestCase):
