@@ -68,6 +68,7 @@ class Recipe(models.Model):
     update_on = models.DateTimeField(auto_now=True)
 
     tags = models.ManyToManyField('Tag')
+    ingredients = models.ManyToManyField('Ingredient')
 
     def __str__(self) -> str:
         return self.title
@@ -75,6 +76,18 @@ class Recipe(models.Model):
 
 class Tag (models.Model):
     """Tag for filtering recipe."""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Ingredient(models.Model):
+    """Ingredient for recipes."""
     name = models.CharField(max_length=255)
     user = models.ForeignKey(
         User,
