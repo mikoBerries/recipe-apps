@@ -453,6 +453,60 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
 
+    def test_filter_by_tags(self):
+        """Test filtering recipes by tags."""
+        recipe_one = create_recipe(user=self.user, title='salad')
+        recipe_two = create_recipe(user=self.user, title='ice cream')
+        tag_one = Tag.objects.create(user=self.user, name='vegan')
+        tag_two = Tag.objects.create(user=self.user, name='sweet')
+
+        recipe_one.tags.add(tag_one)
+        recipe_two.tags.add(tag_two)
+
+        recipe_three = create_recipe(user=self.user, title='fish and chips')
+
+        params = {'tags': f'{tag_one.id},{tag_two.id}'}
+        response = self.client.get(RECIPE_URL, params)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        serializer_salad = RecipeSerializer(recipe_one)
+        serializer_ice_cream = RecipeSerializer(recipe_two)
+        serializer_fish_chips = RecipeSerializer(recipe_three)
+
+        # only returning an selected tags
+        self.assertIn(serializer_salad, response.data)
+        self.assertIn(serializer_ice_cream, response.data)
+        self.assertNotIn(serializer_fish_chips, response.data)
+
+    def test_filter_by_ingredients(self):
+        """Test filtering recipe by ingredients."""
+        recipe_one = create_recipe(user=self.user, title='salad')
+        recipe_two = create_recipe(user=self.user, title='ice cream')
+
+        ingredient_one = Ingredient.objects.create(
+            user=self.user, name='something green')
+        ingredient_two = Ingredient.objects.create(user=self.user, name='milk')
+
+        recipe_one.ingredients.add(ingredient_one)
+        recipe_two.ingredients.add(ingredient_two)
+
+        recipe_three = create_recipe(user=self.user, title='fish and chips')
+
+        params = {'ingredients': f'{ingredient_one.id},{ingredient_two.id}'}
+        response = self.client.get(RECIPE_URL, params)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        serializer_salad = RecipeSerializer(recipe_one)
+        serializer_ice_cream = RecipeSerializer(recipe_two)
+        serializer_fish_chips = RecipeSerializer(recipe_three)
+
+        # only returning an selected tags
+        self.assertIn(serializer_salad, response.data)
+        self.assertIn(serializer_ice_cream, response.data)
+        self.assertNotIn(serializer_fish_chips, response.data)
+
 
 class ImageUploadTest(TestCase):
     """Test for image upload API."""
@@ -502,5 +556,5 @@ class ImageUploadTest(TestCase):
         url = image_upload_url(self.recipe.id)
         payload = {'image': 'This is just a string data'}
         response = self.client.post(url, payload, format='multipart')
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
