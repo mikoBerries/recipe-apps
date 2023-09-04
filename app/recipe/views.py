@@ -2,7 +2,11 @@
 Views for recipe API
 """
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -24,15 +28,37 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """Return speicifcy serializer class for each request."""
+
         # return super().get_serializer_class()
-        if self.action == 'list':
+        if self.action == 'list':  # is url list called
             return serializer.RecipeSerializer
+        elif self.action == 'upload_image':  # if upload_image called
+            return serializer.RecipeImageSerializer
 
         return self.serializer_class
 
     def perform_create(self, serializer):
         """Create a new recipe."""
         serializer.save(user=self.request.user)
+
+    # Create a new costum action excluding from CRUD in viewset
+    # if detail is true then url must including from base url {id}
+    @action(methods=['POST'], detail=True, url_path='upload-image')
+    def upload_image(self, request, pk=None):
+        """Upload an image to incoming recipe."""
+        recipe = self.get_object()
+        # serizalie incoming object
+        serializer = self.get_serializer(recipe, data=request.data)
+
+        # check validation of incoming request that populate in choosen serizalier
+        if serializer.is_valid():
+            # save data and create django style response data
+            serializer.save()
+            # will return saved serializer object with status HTTP 200
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # returning error in each fileds with status HTTP 400
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,

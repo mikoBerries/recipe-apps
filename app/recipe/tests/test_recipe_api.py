@@ -1,6 +1,10 @@
 """
 Test for recipe APIs.
 """
+import tempfile
+import os
+
+from PIL import Image
 
 from decimal import Decimal
 from django.test import TestCase
@@ -27,6 +31,11 @@ def create_dummy_user(**params):
 def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
+
+
+def image_upload_url(recipe_id):
+    """Create and return an image upload URL."""
+    return reverse('recipe:recipe-upload-image', args=[recipe_id])
 
 
 def create_recipe(user, **params):
@@ -443,3 +452,55 @@ class PrivateRecipeAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
+
+
+class ImageUploadTest(TestCase):
+    """Test for image upload API."""
+
+    def setUp(self):
+        # setUp before test class started
+        self.user = create_dummy_user(
+            email='testing@example.com',
+            password='testpass123'
+        )
+
+        # authenticate using create user
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.recipe = create_recipe(user=self.user)
+
+    def tearDown(self):
+        # tear down will execute after every test case done
+        self.recipe.image.delete()
+
+    def test_upload_image(self):
+        """Test uploading a image to a recipe."""
+        url = image_upload_url(self.recipe.id)
+
+        # using tempfile.NamedTemporaryFile to make name image file with diffent suffix
+        with tempfile.NamedTemporaryFile(suffix='.jpg')as image_file:
+            # using PIL.Image to make dummy images.
+            img = Image.new('RGB', (10, 10))
+            # Write img data to image_file
+            img.save(image_file, format='JPEG')
+            # change cursor pointer to start (just in case)
+            image_file.seek(0)
+
+            payload = {'image': image_file}
+            response = self.client.post(url, payload, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # refresh updated local data match to DB
+        self.recipe.refresh_from_db()
+        # cehck are image is created and returned in response.body from post url
+        self.assertIn('image', response.data)
+        # checking is file are created in static file on starting server?
+        self.assertTrue(os.path.exists(self.recipe.image.path))
+
+    def test_upload_image_bad_rquest(self):
+        """Test uploading a image to a recipe returned Bad request."""
+        url = image_upload_url(self.recipe.id)
+        payload = {'image': 'This is just a string data'}
+        response = self.client.post(url, payload, format='multipart')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
