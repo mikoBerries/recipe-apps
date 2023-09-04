@@ -6,7 +6,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 from recipe import serializer
 
 
@@ -35,13 +35,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class TagViewSet(mixins.DestroyModelMixin,
-                 mixins.UpdateModelMixin,
-                 mixins.ListModelMixin,
-                 viewsets.GenericViewSet):
-    """View for tag in the database."""
-    serializer_class = serializer.TagSerializer
-    queryset = Tag.objects.all()
+class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,
+                            mixins.UpdateModelMixin,
+                            mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
+    """Base viewset for recipe attributes"""
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -49,3 +47,34 @@ class TagViewSet(mixins.DestroyModelMixin,
         """Filtering queryset to authenticated user only."""
         # will filtering Tag data with incoming user request.
         return self.queryset.filter(user=self.request.user).order_by('-name')
+
+
+class TagViewSet(BaseRecipeAttrViewSet):
+    """View for tag in the database."""
+    serializer_class = serializer.TagSerializer
+    queryset = Tag.objects.all()
+
+    # Refactoring with BaseRecipeAttrViewSet
+
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    # def get_queryset(self):
+    #     """Filtering queryset to authenticated user only."""
+    #     # will filtering Tag data with incoming user request.
+    #     return self.queryset.filter(user=self.request.user).order_by('-name')
+
+
+class IngredientViewSet(BaseRecipeAttrViewSet):
+    """"View for ingredients."""
+    serializer_class = serializer.IngredientSerializer
+    queryset = Ingredient.objects.all()
+    # Refactoring with BaseRecipeAttrViewSet
+
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    # def get_queryset(self):
+    #     """Filtering queryset to authenticated user only."""
+    #     # will filtering Tag data with incoming user request.
+    #     return self.queryset.filter(user=self.request.user).order_by('-name')
