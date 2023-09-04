@@ -10,6 +10,8 @@ COPY ./requirement.dev.txt /tmp/requirement.dev.txt
 # copy source code
 COPY ./app /app
 
+COPY ./scripts /scripts
+
 WORKDIR /app
 EXPOSE 8000
 
@@ -27,7 +29,7 @@ RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
-    build-base postgresql-dev musl-dev zlib zlib-dev && \
+    build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
     /py/bin/pip install -r /tmp/requirement.txt && \
     if [ $DEV="true" ]; \
     then /py/bin/pip install -r /tmp/requirement.dev.txt ; \
@@ -45,7 +47,7 @@ RUN python -m venv /py && \
 
 
 # update global env
-ENV PATH="/py/bin:$PATH"
+ENV PATH="/scripts:py/bin:$PATH"
 
 # log using selected user (created user)
 USER django-user

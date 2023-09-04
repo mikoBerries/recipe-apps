@@ -53,11 +53,22 @@
         'delete': 'destroy'
     }
 ```
-
 * working with models.ImageField / models.FileField : (https://docs.djangoproject.com/en/4.2/ref/models/fields/#filefield)
 
 * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
 
+
+# Deployment on django
+----------------------
+![Django architechture](https://robotforestio.files.wordpress.com/2020/08/wsgi-nginx-uwsgi.png)
+
+* static files in django better to server in diffrent services
+* Django & uWSGI : (https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/uwsgi/)
+    - uWSGI operates on a client-server model. Your web server (e.g., nginx, Apache) communicates with a django-uwsgi “worker” process to serve dynamic content.
+    - uWSGI params for server (https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html#what-is-the-uwsgi-params-file)
+
+# ETC
+------
 * Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
 
 * Chanching with django (https://docs.djangoproject.com/en/4.2/topics/cache/#:~:text=redis%2Dpy%20is%20the%20binding,Set%20BACKEND%20to%20django.)
