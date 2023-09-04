@@ -13,7 +13,7 @@ from django.contrib.auth.models import (
 )
 
 
-def recipe_image_filepath(instace, filename):
+def recipe_image_file_path(instace, filename):
     """Generate file path for new recipe image."""
     # get extendsion file (.jpg / .png)
     extendsion = os.path.splitext(filename)[1]
@@ -83,7 +83,7 @@ class Recipe(models.Model):
     tags = models.ManyToManyField('Tag')
     ingredients = models.ManyToManyField('Ingredient')
 
-    image = models.ImageField(null=True, upload_to=recipe_image_filepath)
+    image = models.ImageField(null=True, upload_to=recipe_image_file_path)
     # arguments for setting heigt and weight of images maxlength
     # height_field=None, width_field=None, max_length=None)
 
