@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from rest_framework.test import APIClient
 from rest_framework import status
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 
 from recipe.serializer import (
     RecipeSerializer,
@@ -303,15 +303,15 @@ class PrivateRecipeAPITests(TestCase):
     def test_update_recipe_assign_tag(self):
         """Test assigning an existing tag when updating a recipe."""
         tag_breakfast = Tag.objects.create(user=self.user, name='Breakfast')
-        
+
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag_breakfast)
 
         tag_lunch = Tag.objects.create(user=self.user, name='Lunch')
-        
-        payload = {'tags': [{'name': 'Lunch'}] }
+
+        payload = {'tags': [{'name': 'Lunch'}]}
         url = detail_url(recipe.id)
-        
+
         res = self.client.patch(url, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -332,3 +332,66 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         self.assertEqual(recipe.tags.count(), 0)
+
+    def test_create_recipe_with_new_ingredient(self):
+        """Test creating a new Recipe with new ingredient."""
+
+        payload = {
+            'title': 'Ratatoui',
+            'time_munites': 60,
+            'price': Decimal('120.25'),
+            'ingredients': [{'name': 'Potato'}, {'name': 'Chocolate'}],
+            'description': 'This is a ice cream',
+            'link': 'http://exmaple.com/ratatoui.pdf',
+        }
+
+        response = self.client.post(RECIPE_URL, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # check created recipe in database with payload
+        recipes = Recipe.objects.filter(user=self.user)
+        self.assertEqual(recipes.count(), 1)
+
+        recipe = recipes[0]
+        self.assertEqual(recipe.ingredients.count(), 2)
+
+        # check is every ingredient in payload craeted ?
+        for ingredient in payload['ingredients']:
+            ingredient_existed = recipe.ingredients.filter(
+                name=ingredient['name'], user=self.user
+            ).exists()
+            self.assertTrue(ingredient_existed)
+
+    def test_create_recipe_with_existing_ingredient(self):
+        """Test creating a new Recipe with existing ingredient."""
+        payload = {
+            'title': 'Ratatoui',
+            'time_munites': 60,
+            'price': Decimal('120.25'),
+            'ingredients': [{'name': 'Potato'}, {'name': 'Chocolate'}],
+            'description': 'This is a ice cream',
+            'link': 'http://exmaple.com/ratatoui.pdf',
+        }
+
+        existed_ingredient = Ingredient.objects.create(
+            user=self.user, name='Lemon')
+        payload['ingredients'].append(ingredient)
+
+        response = self.client.post(RECIPE_URL, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # check created recipe in database with payload
+        recipes = Recipe.objects.filter(user=self.user)
+        self.assertEqual(recipes.count(), 1)
+
+        recipe = recipes[0]
+        self.assertEqual(recipe.ingredients.count(), 3)
+        self.assertIn(existed_ingredient, recipe.ingredients.all())
+        # check is every ingredient in payload craeted ?
+        for ingredient in payload['ingredients']:
+            ingredient_existed = recipe.ingredients.filter(
+                name=ingredient['name'], user=self.user
+            ).exists()
+            self.assertTrue(ingredient_existed)
