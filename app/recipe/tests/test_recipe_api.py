@@ -44,7 +44,7 @@ def create_recipe(user, **params):
     # default values
     defaults = {
         'title': 'sample recipe title',
-        'time_munites': 22,
+        'time_minutes': 22,
         'price': Decimal('5.25'),
         'description': 'Sample description',
         'link': 'http://exmaple.com/recipe.pdf',
@@ -132,7 +132,7 @@ class PrivateRecipeAPITests(TestCase):
 
         payload = {
             'title': 'sample recipe title',
-            'time_munites': 22,
+            'time_minutes': 22,
             'price': Decimal('5.25'),
             # 'description': 'Sample description',
             # 'link': 'http://exmaple.com/recipe.pdf',
@@ -181,7 +181,7 @@ class PrivateRecipeAPITests(TestCase):
         )
         payload = {
             'title': 'new recipe title',
-            'time_munites': 100,
+            'time_minutes': 100,
             'price': Decimal('2.25'),
             'description': 'this is a new description',
             'link': 'http://exmaple.com/new-recipe.pdf',
@@ -246,7 +246,7 @@ class PrivateRecipeAPITests(TestCase):
 
         payload = {
             'title': 'Vannila ice cream',
-            'time_munites': 100,
+            'time_minutes': 100,
             'price': Decimal('10.25'),
             'tags': [{'name': 'cold'}, {'name': 'vannila'}],
             'description': 'This is a ice cream',
@@ -274,7 +274,7 @@ class PrivateRecipeAPITests(TestCase):
         tag_indian = Tag.objects.create(user=self.user, name='indian')
         payload = {
             'title': 'Pongal',
-            'time_munites': 100,
+            'time_minutes': 100,
             'price': Decimal('10.25'),
             'tags': [{'name': 'indian'}, {'name': 'Hot'}],
             'description': 'this is indian food',
@@ -347,7 +347,7 @@ class PrivateRecipeAPITests(TestCase):
 
         payload = {
             'title': 'Ratatoui',
-            'time_munites': 60,
+            'time_minutes': 60,
             'price': Decimal('120.25'),
             'ingredients': [{'name': 'Potato'}, {'name': 'Chocolate'}],
             'description': 'This is a ice cream',
@@ -376,7 +376,7 @@ class PrivateRecipeAPITests(TestCase):
         """Test creating a new Recipe with existing ingredient."""
         payload = {
             'title': 'Ratatoui',
-            'time_munites': 60,
+            'time_minutes': 60,
             'price': Decimal('120.25'),
             'ingredients': [{'name': 'Potato'}, {'name': 'Chocolate'}, {'name': 'Lemon'}],
             'description': 'This is a ice cream',
