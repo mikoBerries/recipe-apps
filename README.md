@@ -54,6 +54,8 @@
     }
 ```
 
+* working with models.ImageField / models.FileField : (https://docs.djangoproject.com/en/4.2/ref/models/fields/#filefield)
+
 * django model for times for create_at & update_on data : https://www.hacksoft.io/blog/timestamps-in-django-exploring-auto-now-auto-now-add-and-default
 
 * Django & mongo DB (https://www.mongodb.com/compatibility/mongodb-and-django).
