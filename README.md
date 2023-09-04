@@ -65,7 +65,7 @@
 * static files in django better to server in diffrent services
 * Django & uWSGI : (https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/uwsgi/)
     - uWSGI operates on a client-server model. Your web server (e.g., nginx, Apache) communicates with a django-uwsgi “worker” process to serve dynamic content.
-
+    - uWSGI params for server (https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html#what-is-the-uwsgi-params-file)
 
 # ETC
 ------
