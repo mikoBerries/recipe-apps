@@ -68,22 +68,25 @@ class PrivateIngredientTest(TestCase):
         """Test list of ingredients is limited by authenticated users."""
 
         other_user = create_dummy_user(
-            email="other_user_ingredient@example.com")
+            email="other_user_ingredient@example.com", password="Test1231")
         Ingredient.objects.create(user=other_user, name='cother cocacola')
         Ingredient.objects.create(user=other_user, name='other bakery')
-
-        Ingredient.objects.create(user=self.user, name='cola-cola')
-        Ingredient.objects.create(user=self.user, name='bakery')
+        # my_inggredient = []
+        # my_inggredient.append(Ingredient.objects.create(
+        #     user=self.user, name='cola-cola'))
+        # my_inggredient.append(Ingredient.objects.create(
+        #     user=self.user, name='bakery'))
+        inggredient = Ingredient.objects.create(
+            user=self.user, name='bakery')
 
         response = self.client.get(INGREDIENTS_URL)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        ingredients = Ingredient.objects.all().order_by('-name')
-        serializer = IngredientSerializer(ingredients, many=True)
-
-        self.assertEqual(len(serializer.data), 2)
-        self.assertEqual(ingredients.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], inggredient.name)
+        self.assertEqual(response.data[0]['id'], inggredient.id)
 
     def test_update_ingredients(self):
         """Test updating a Inggredients."""
@@ -95,7 +98,7 @@ class PrivateIngredientTest(TestCase):
         response = self.client.patch(url, payload)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        Ingredient.refresh_from_db()
+        ingredients.refresh_from_db()
         self.assertEqual(ingredients.name, payload['name'])
 
     def test_delete_ingredients(self):
