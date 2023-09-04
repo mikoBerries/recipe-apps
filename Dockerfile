@@ -20,6 +20,9 @@ ARG DEV=false
 # installing psycopg2 depedency for alpine images
 # instaling depedency for python project
 # add user for alpine images to log instead root user
+# creating subfolder for static file
+# change owner of directory
+# chang permission of directory /vol
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client jpeg-dev && \
@@ -34,7 +37,12 @@ RUN python -m venv /py && \
     adduser\
     --disabled-password \
     --no-create-home \
-    django-user
+    django-user && \
+    mkdir -p /vol/web/media &&\
+    mkdir -p /vol/web/static &&\
+    chwon -R django-user:django-user /vol && \
+    chmod -R 755 /vol 
+
 
 # update global env
 ENV PATH="/py/bin:$PATH"
