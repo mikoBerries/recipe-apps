@@ -172,5 +172,8 @@ REST_FRAMEWORK = {
 
 # setting for uploading images to web browser
 SPECTACULAR_SETTINGS = {
+    'TITLE': 'Recipe API',
+    'DESCRIPTION': 'Recipe api with python django',
+    'VERSION': '1.0.0',
     'COMPONENT_SPLIT_REQUEST': True,
 }
