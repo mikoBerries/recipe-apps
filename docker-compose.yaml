@@ -17,6 +17,7 @@ services:
       - DB_NAME=recipe
       - DB_USER=root
       - DB_PASS=mysecretpassword
+      - DEBUG=1
     volumes:
       - recipe_app/app
       - dev-static-data:/vol/web
